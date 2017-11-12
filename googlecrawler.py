@@ -2,10 +2,12 @@
 import scrapy
 import pandas as pd
 
+query = input('Enter coin to be searched : ')
+
 class GooglecrawlerSpider(scrapy.Spider):
 	name = 'googlecrawler'
-	allowed_domains = ['https://news.google.com/news/search/section/q/litecoin/litecoin?hl=en&gl=US&ned=us']
-	start_urls = ['https://news.google.com/news/search/section/q/litecoin/litecoin?hl=en&gl=US&ned=us//']
+	allowed_domains = ['https://news.google.com/news/search/section/q/'+query+'/'+query+'?hl=en&gl=US&ned=us']
+	start_urls = ['https://news.google.com/news/search/section/q/'+query+'/'+query+'?hl=en&gl=US&ned=us//']
 
 	def parse(self, response):
 		scraped_info = {
@@ -16,6 +18,6 @@ class GooglecrawlerSpider(scrapy.Spider):
 		web_addr = response.css('.nuEeue::attr(href)').extract()
 
 		data = pd.DataFrame({'News Title': title, 'Web Address' : web_addr})
-		data.to_csv('bitcoin.csv', sep = ',')
+		data.to_csv(''+query+'.csv', sep = ',')
 		
 		yield scraped_info
